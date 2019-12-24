@@ -23,10 +23,10 @@
         app:layout_constraintVertical_bias="0.055" />
 
     <com.omarshehe.forminputkotlin.FormInputText
-        android:id="@+id/nom_complet"
+        android:id="@+id/prenom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:form_height="40dp"
         app:form_hint="ton prenon"
         app:form_inputType="text"
@@ -39,29 +39,75 @@
         app:layout_constraintTop_toBottomOf="@+id/nom_magazin"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/ville"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:height="40dp"
+        android:background="#FFFAFA"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:text="Abidjan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prenom" />
+
+    <com.omarshehe.forminputkotlin.FormInputAutoComplete
+        android:id="@+id/commune"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:form_array="@array/commune"
+        app:form_height="40dp"
+        app:form_hint="Entre ta commune de residence"
+        app:form_inputType="text"
+        app:form_isMandatory="true"
+        app:form_label="Commune"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ville" />
+
+
+    <com.omarshehe.forminputkotlin.FormInputText
+        android:id="@+id/nomQuartier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:form_height="40dp"
+        app:form_hint="Entre ton quartier de residence"
+        app:form_inputType="text"
+        app:form_isMandatory="true"
+        app:form_label="Ton quartier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commune" />
+
     <com.omarshehe.forminputkotlin.FormInputText
         android:id="@+id/phoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:form_hint="+225 55251771"
         app:form_inputType="phoneNumber"
         app:form_isMandatory="true"
         app:form_label="Numero"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nom_complet" />
+        app:layout_constraintTop_toBottomOf="@+id/nomQuartier" />
 
     <com.omarshehe.forminputkotlin.FormInputButton
         android:id="@+id/btnSubmit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:form_background="@color/colorPrimary"
-        app:form_cornerRadius="100"
+        app:form_cornerRadius="80"
         app:form_height="55dp"
         app:form_progressColor="@color/colorRed"
         app:form_showProgress="true"
         app:form_textColor="@color/white"
+        android:onClick="registerMagasin"
         app:form_value="@string/Submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

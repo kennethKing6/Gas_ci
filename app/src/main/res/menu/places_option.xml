@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ville"
+        android:title="Choisir ta ville"></item>
+    <item
+        android:id="@+id/quartier"
+        android:title="Choisir ton quartier"></item>
+</menu>

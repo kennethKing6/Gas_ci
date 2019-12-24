@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="commune">
+        <item>Abobo</item>
+        <item>Adjamé</item>
+        <item>Atécoubé</item>
+        <item>Cocody</item>
+        <item>Koumassi</item>
+        <item>Marcory</item>
+        <item>Plateau</item>
+        <item>Port-Boue</item>
+        <item>Treichville</item>
+        <item>Yopougon</item>
+    </string-array>
+</resources>
