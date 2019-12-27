@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:fillViewport="true"
+    tools:context=".BusinessDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <com.omarshehe.forminputkotlin.FormInputText
+        android:layout_marginTop="16dp"
         android:id="@+id/nom_magazin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:form_hint="+225 55251771"
+        app:form_hint="55251771"
         app:form_inputType="phoneNumber"
         app:form_isMandatory="true"
         app:form_label="Numero"
@@ -100,17 +108,16 @@
         android:id="@+id/btnSubmit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="16dp"
+        android:onClick="registerMagasin"
         app:form_background="@color/colorPrimary"
         app:form_cornerRadius="80"
         app:form_height="55dp"
         app:form_progressColor="@color/colorRed"
         app:form_showProgress="true"
         app:form_textColor="@color/white"
-        android:onClick="registerMagasin"
-        app:form_value="@string/Submit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
+        app:form_value="@string/Submit" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>

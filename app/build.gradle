@@ -55,6 +55,10 @@ dependencies {
     //FloatingActionButton lib
     implementation 'com.github.clans:fab:1.6.4'
 
+    //Paper Library
+    implementation 'io.paperdb:paperdb:2.6'
+
+
 
 
 

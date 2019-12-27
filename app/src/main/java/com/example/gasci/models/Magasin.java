@@ -13,8 +13,10 @@ public class Magasin {
     private String numero;
 
 
+
     public Magasin() {
     }
+
 
     public Magasin(String nomDeMagazin, String prenom, String ville, String commune, String quartier, String numero) {
         this.nomDeMagazin = nomDeMagazin;

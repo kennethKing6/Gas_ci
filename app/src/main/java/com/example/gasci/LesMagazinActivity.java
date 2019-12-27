@@ -9,12 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.gasci.Dialogs.LocationDialog;
@@ -27,9 +23,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.poliveira.parallaxrecyclerview.ParallaxRecyclerAdapter;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,7 +45,7 @@ public class LesMagazinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_les_magazin);
 
         ButterKnife.bind(this);
-        Query query = FirebaseFirestore.getInstance().collection(MainActivity.INFO_BUSINESS).whereEqualTo(COMMUNE, "Koumassi");
+        Query query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).whereEqualTo(COMMUNE, "Koumassi");
 
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -128,7 +121,7 @@ public class LesMagazinActivity extends AppCompatActivity {
 
     @OnClick(R.id.reglage_item)
     void ouvreReglage(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, BusinessDetails.class);
         startActivity(intent);
     }
 
