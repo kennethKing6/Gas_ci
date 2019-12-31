@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/nom_magazin_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    android:background="@drawable/item_view_shape"
+    android:paddingLeft="12dp">
 
     <TextView
         android:id="@+id/prenom_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:fontFamily="@font/chango"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="Katoua" />
+
+    <TextView
+        android:id="@+id/nom_magazin_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="Nom de magazin de gaz" />
+
+    <TextView
+        android:id="@+id/ville_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ville: "
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        tools:text="Abidjan" />
+
+    <TextView
+        android:id="@+id/commune_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Commune: "
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        tools:text="adjame" />
 
     <TextView
         android:id="@+id/quartier_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Quartier: "
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        tools:text="yopougon nord" />
+
+    <TextView
+        android:id="@+id/numero_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:inputType="number"
+        android:text="Contact: "
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
 </LinearLayout>

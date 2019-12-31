@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:form_array="@array/commune"
+        app:form_array="@array/commune_array"
         app:form_height="40dp"
         app:form_hint="Entre ta commune de residence"
         app:form_inputType="text"

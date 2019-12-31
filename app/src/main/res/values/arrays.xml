@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="commune">
+    <string-array name="commune_array">
+        <item>N/A</item>
         <item>Abobo</item>
         <item>Adjamé</item>
         <item>Atécoubé</item>
@@ -12,4 +13,7 @@
         <item>Treichville</item>
         <item>Yopougon</item>
     </string-array>
+    <string-array name="quartier_array">
+        <item>N/A</item>
+        </string-array>
 </resources>

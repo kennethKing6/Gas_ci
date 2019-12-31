@@ -13,7 +13,6 @@ public class Magasin {
     private String numero;
 
 
-
     public Magasin() {
     }
 

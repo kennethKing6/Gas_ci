@@ -10,7 +10,6 @@ import android.location.Address;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.omarshehe.forminputkotlin.FormInputAutoComplete;
 import com.omarshehe.forminputkotlin.FormInputText;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -230,7 +228,7 @@ public class BusinessDetails extends AppCompatActivity {
                 } else if (!hasFocus && !communeView.getValue().isEmpty()) {
 
 
-                    List<String> communeList = Arrays.asList(getResources().getStringArray(R.array.commune));
+                    List<String> communeList = Arrays.asList(getResources().getStringArray(R.array.commune_array));
                     if (!communeList.contains(communeView.getValue())) {
                         communeView.getInputBox().setError("Veuillez choisir une commune de la liste");
                     }
