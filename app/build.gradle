@@ -58,6 +58,8 @@ dependencies {
     //Paper Library
     implementation 'io.paperdb:paperdb:2.6'
 
+    implementation 'com.treebo:internetavailabilitychecker:1.0.4'
+
 
 
 

@@ -2,13 +2,17 @@ package com.example.gasci;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +29,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.poliveira.parallaxrecyclerview.ParallaxRecyclerAdapter;
+import com.treebo.internetavailabilitychecker.InternetAvailabilityChecker;
+import com.treebo.internetavailabilitychecker.InternetConnectivityListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +55,12 @@ public class LesMagazinActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     List<DocumentSnapshot> myContent = new ArrayList<>();
 
+    @BindView(R.id.empty_list_layout)
+    ConstraintLayout emptyLayout;
+    @BindView(R.id.no_internet_layout)
+    ConstraintLayout noInternetLayout;
+
+
     private ParallaxRecyclerAdapter<DocumentSnapshot> adapter = new ParallaxRecyclerAdapter<DocumentSnapshot>(myContent) {
         @Override
         public void onBindViewHolderImpl(RecyclerView.ViewHolder viewHolder, ParallaxRecyclerAdapter<DocumentSnapshot> adapter, int i) {
@@ -60,14 +73,19 @@ public class LesMagazinActivity extends AppCompatActivity {
             TextView villeTxtView = viewHolder.itemView.findViewById(R.id.ville_text_view);
             TextView communeTxtView = viewHolder.itemView.findViewById(R.id.commune_text_view);
             TextView quartierTxtView = viewHolder.itemView.findViewById(R.id.quartier_text_view);
-            TextView numeroEditText = viewHolder.itemView.findViewById(R.id.numero_text_view);
+            TextView numeroTextView = viewHolder.itemView.findViewById(R.id.numero_text_view);
 
             prenomTxtView.setText(magasin.getPrenom());
             nomMagazinTxtView.setText(magasin.getNomDeMagazin());
             villeTxtView.setText("Ville: " + magasin.getVille());
             communeTxtView.setText("Commune: " + magasin.getCommune());
             quartierTxtView.setText("Quartier: " + magasin.getQuartier());
-            numeroEditText.setText("Numero: " + magasin.getNumero());
+            numeroTextView.setText("Numero: " + magasin.getNumero());
+
+            Pattern numeroMatcher = Pattern.compile("[+]225 (\\d{8})");
+
+
+            Linkify.addLinks(numeroTextView, numeroMatcher, "");
 
 
         }
@@ -97,6 +115,7 @@ public class LesMagazinActivity extends AppCompatActivity {
 
 
     }
+
 
     private class MyCustomViewHolder extends RecyclerView.ViewHolder {
 
@@ -152,13 +171,26 @@ public class LesMagazinActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
 
                 } else {
-                    if (!task.isSuccessful()) {
-                        //TODO: screen for task was not successful most probably due to network issues
-                        Log.w(TAG, "onComplete: task not successful ");
+                    if (!task.isSuccessful() || !isConnected()) {
 
-                    } else {
+                        ProgressBar progressBar = findViewById(R.id.progressBar);
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
+                        noInternetLayout.setVisibility(View.VISIBLE);
+                    } else if (myContent.size() == 0) {
                         //TODO: Show empty list layout
-                        Log.w(TAG, "Empty screen");
+                        new CountDownTimer(3000, 1000) {
+                            public void onTick(long millisUntilFinished) {
+                            }
+
+                            public void onFinish() {
+                                ProgressBar progressBar = findViewById(R.id.progressBar);
+                                progressBar.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.GONE);
+                                emptyLayout.setVisibility(View.VISIBLE);
+                            }
+                        }.start();
+
 
                     }
                 }
@@ -170,12 +202,34 @@ public class LesMagazinActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+
         SharedPreferences sharedPreferences = getSharedPreferences(BUSINESS_LOOK_UP, Context.MODE_PRIVATE);
 
         initializeAdapter(sharedPreferences.getString(VILLE_SHARED_KEY, getString(R.string.ville_default_value)),
                 sharedPreferences.getString(COMMUNE_SHARED_KEY, getString(R.string.commune_default_value)),
                 sharedPreferences.getString(QUARTIER_SHARED_KEY, getString(R.string.quartier_default_value)));
 
+
+    }
+
+    private boolean isConnected() {
+        boolean connected = true;
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+        //For 3G check
+        boolean is3g = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+                .isConnectedOrConnecting();
+        //For WiFi Check
+        boolean isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                .isConnectedOrConnecting();
+
+        Log.e(TAG, is3g + " net " + isWifi);
+
+        if (!is3g && !isWifi) {
+            connected = false;
+        }
+        return connected;
     }
 
 

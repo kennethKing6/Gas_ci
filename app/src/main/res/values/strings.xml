@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Gas CI</string>
+    <string name="app_name">Gaz CI</string>
     <string name="ville_default_value">Abidjan</string>
     <string name="commune_default_value">N/A</string>
     <string name="quartier_default_value">N/A</string>
