@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="commune_array">
+    <string-array name="abidjan_commune_array">
         <item>N/A</item>
         <item>Abobo</item>
         <item>Adjamé</item>
@@ -15,5 +15,49 @@
     </string-array>
     <string-array name="quartier_array">
         <item>N/A</item>
-        </string-array>
+    </string-array>
+
+    <string-array name="ville_de_cote_ivoire_array">
+        <item>N/A</item>
+        <item>Abidjan</item>
+        <item>Bouaké</item>
+        <item>Daloa</item>
+        <item>Yamoussoukro</item>
+        <item>San-Pédro</item>
+        <item>Divo</item>
+        <item>Korhogo</item>
+        <item>Anyama</item>
+        <item>Abengourou</item>
+        <item>Man</item>
+        <item>Gagnoa</item>
+        <item>Soubré</item>
+        <item>Agboville</item>
+        <item>Dabou</item>
+        <item>Grand-Bassam</item>
+        <item>Bouaflé</item>
+        <item>Issia</item>
+        <item>Sinfra</item>
+        <item>Katiola</item>
+        <item>Bingerville</item>
+        <item>Adzopé</item>
+        <item>Séguéla</item>
+        <item>Bondoukou</item>
+        <item>Oumé</item>
+        <item>Ferkessedougou</item>
+        <item>Dimbokro</item>
+        <item>Odienné</item>
+        <item>Duékoué</item>
+        <item>Danané</item>
+        <item>Tingréla</item>
+        <item>Guiglo</item>
+        <item>Boundiali</item>
+        <item>Agnibilékrou</item>
+        <item>Daoukro</item>
+        <item>Vavoua</item>
+        <item>Zuénoula</item>
+        <item>Tiassalé</item>
+        <item>Toumodi</item>
+        <item>Akoupé</item>
+        <item>Lakota</item>
+    </string-array>
 </resources>

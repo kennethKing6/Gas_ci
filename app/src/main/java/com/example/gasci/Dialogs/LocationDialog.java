@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.omarshehe.forminputkotlin.FormInputAutoComplete;
 import com.poliveira.parallaxrecyclerview.ParallaxRecyclerAdapter;
 
 import static com.example.gasci.LesMagazinActivity.RESTARTED_ACTIVITY;
+import static com.example.gasci.Utils.QueryUtils.N_A;
 
 public class LocationDialog extends DialogFragment {
 
@@ -40,13 +43,11 @@ public class LocationDialog extends DialogFragment {
     private SharedPreferences businessLookupSharedPref;
 
     private Context context;
-    private ParallaxRecyclerAdapter<DocumentSnapshot> adapter;
 
 
-    public LocationDialog(Context context, ParallaxRecyclerAdapter<DocumentSnapshot> adapter) {
+    public LocationDialog(Context context) {
         businessLookupSharedPref = context.getSharedPreferences(BUSINESS_LOOK_UP, Context.MODE_PRIVATE);
         this.context = context;
-        this.adapter = adapter;
     }
 
     @NonNull
@@ -61,19 +62,28 @@ public class LocationDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.location_layout, null);
 
         // sign in the user ...
-        TextView villeTextView = view.findViewById(R.id.ville);
+        FormInputAutoComplete villeAutoComplete = view.findViewById(R.id.ville);
         FormInputAutoComplete communeAutoComplete = view.findViewById(R.id.commune);
         FormInputAutoComplete quartierAutoComplete = view.findViewById(R.id.quartier);
 
-        String ville = villeTextView.getText().toString();
-        String commune = communeAutoComplete.getValue();
-        String quartier = communeAutoComplete.getValue();
+        prepareViews(villeAutoComplete, communeAutoComplete, quartierAutoComplete);
 
-        villeTextView.setText(businessLookupSharedPref.getString(VILLE_SHARED_KEY, ville));
+        if (!businessLookupSharedPref.getString(VILLE_SHARED_KEY,
+                "").isEmpty()) {
+            villeAutoComplete.setValue(businessLookupSharedPref.getString(VILLE_SHARED_KEY,
+                    ""));
+        }
+        if (!businessLookupSharedPref.getString(COMMUNE_SHARED_KEY,
+                "").isEmpty()) {
+            communeAutoComplete.setValue(businessLookupSharedPref.getString(COMMUNE_SHARED_KEY,
+                    ""));
+        }
+        if (!businessLookupSharedPref.getString(QUARTIER_SHARED_KEY,
+                "").isEmpty()) {
+            quartierAutoComplete.setValue(businessLookupSharedPref.getString(QUARTIER_SHARED_KEY,
+                    ""));
+        }
 
-        communeAutoComplete.setValue(businessLookupSharedPref.getString(VILLE_SHARED_KEY, commune));
-
-        quartierAutoComplete.setValue(businessLookupSharedPref.getString(VILLE_SHARED_KEY, quartier));
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(view)
@@ -84,14 +94,27 @@ public class LocationDialog extends DialogFragment {
 
 
                         SharedPreferences.Editor businesspref = businessLookupSharedPref.edit();
-                        if (!ville.equals(villeTextView.getText().toString())) {
-                            businesspref.putString(VILLE_SHARED_KEY, villeTextView.getText().toString());
-                        } else if (!commune.equals(communeAutoComplete.getValue())) {
-                            businesspref.putString(COMMUNE_SHARED_KEY, communeAutoComplete.getValue());
-                        } else if (!quartier.equals(quartierAutoComplete.getValue())) {
-                            businesspref.putString(QUARTIER_SHARED_KEY, quartierAutoComplete.getValue());
+                        if (!villeAutoComplete.getValue().isEmpty()) {
+                            businesspref.putString(VILLE_SHARED_KEY, villeAutoComplete.getValue());
+                        } else {
+                            businesspref.putString(VILLE_SHARED_KEY, N_A);
                         }
+
+                        if (!communeAutoComplete.getValue().isEmpty()) {
+                            businesspref.putString(COMMUNE_SHARED_KEY,
+                                    communeAutoComplete.getVisibility() == View.VISIBLE ? communeAutoComplete.getValue() : N_A);
+                        } else {
+                            businesspref.putString(COMMUNE_SHARED_KEY, N_A);
+                        }
+
+                        if (!quartierAutoComplete.getValue().isEmpty()) {
+                            businesspref.putString(QUARTIER_SHARED_KEY, quartierAutoComplete.getValue());
+                        } else {
+                            businesspref.putString(QUARTIER_SHARED_KEY, N_A);
+                        }
+
                         businesspref.apply();
+
 
                         Intent intent = new Intent(context, LesMagazinActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -108,6 +131,29 @@ public class LocationDialog extends DialogFragment {
 
         return builder.create();
 
+    }
+
+    private void prepareViews(FormInputAutoComplete villeAutoComplete, FormInputAutoComplete communeAutoComplete,
+                              FormInputAutoComplete quartierAutoComplet) {
+
+        if ((businessLookupSharedPref.getString(VILLE_SHARED_KEY,
+                "").equals("Abidjan"))) {
+            communeAutoComplete.setVisibility(View.VISIBLE);
+        }
+
+
+        villeAutoComplete.getInputBox().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus) {
+                    if (villeAutoComplete.getValue().equalsIgnoreCase("Abidjan"))
+                        communeAutoComplete.setVisibility(View.VISIBLE);
+
+
+                }
+            }
+        });
     }
 
 

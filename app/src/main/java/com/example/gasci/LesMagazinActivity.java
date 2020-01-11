@@ -129,7 +129,7 @@ public class LesMagazinActivity extends AppCompatActivity {
 
     @OnClick(R.id.location_item)
     void cherchGaz() {
-        LocationDialog locationDialog = new LocationDialog(this, adapter);
+        LocationDialog locationDialog = new LocationDialog(this);
 
         locationDialog.show(getSupportFragmentManager(), "");
 

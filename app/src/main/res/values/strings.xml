@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Gaz CI</string>
-    <string name="ville_default_value">Abidjan</string>
+    <string name="ville_default_value">N/A</string>
     <string name="commune_default_value">N/A</string>
     <string name="quartier_default_value">N/A</string>
+
+
+    <!--Location querry dialog hint text-->
+    <string name="ville">Entre ta ville</string>
+    <string name="commune">Entre ta commune de residence</string>
+    <string name="quartier">Entre ton quartier de residence</string>
 </resources>
