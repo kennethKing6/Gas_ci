@@ -68,46 +68,29 @@ public class QueryUtils {
      */
     public static Query makeQuery(String ville, String commune, String quartier) {
         Query query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS);
-        Log.e(TAG, "makeQuery: beginning"
-                + "\ncommune: " + commune);
 
-
-        if (!ville.equals(N_A)) {
-
-            Log.e(TAG, "makeQuery: " + ville);
-            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS)
-                    .whereEqualTo(QUERY_VILLE_CONSTANT, ville);
-            if (!commune.equals(N_A) && !quartier.equals(N_A)) {
-
-                query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS)
-                        .whereEqualTo(QUERY_VILLE_CONSTANT, ville)
-                        .whereEqualTo(QUERY_COMMUNE_CONSTANT, commune).
-                                whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
-            } else if (!commune.equals(N_A)) {
-                query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS)
-                        .whereEqualTo(QUERY_VILLE_CONSTANT, ville).whereEqualTo(QUERY_COMMUNE_CONSTANT, commune);
-            } else if (!quartier.equals(N_A)) {
-                query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS)
-                        .whereEqualTo(QUERY_VILLE_CONSTANT, ville).whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
-                Log.e(TAG, "makeQuery: " + quartier);
-
-
-            }
-
-        }
-
-        if (!commune.equals(N_A)) {
-            query.whereEqualTo(QUERY_COMMUNE_CONSTANT, commune);
-            Log.e(TAG, "makeQuery: " + commune);
-
-
-        }
-
-        if (!quartier.equals(N_A)) {
-            query.whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
-            Log.e(TAG, "makeQuery: " + quartier);
-
-
+        if (ville.equals(N_A) && commune.equals(N_A) && !quartier.equals(N_A)) {
+            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).
+                    whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
+        } else if (ville.equals(N_A) && !commune.equals(N_A) && quartier.equals(N_A)) {
+            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).
+                    whereEqualTo(QUERY_COMMUNE_CONSTANT, commune);
+        } else if (ville.equals(N_A) && !commune.equals(N_A) && !quartier.equals(N_A)) {
+            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).
+                    whereEqualTo(QUERY_COMMUNE_CONSTANT, commune).whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
+        } else if (!ville.equals(N_A) && commune.equals(N_A) && quartier.equals(N_A)) {
+            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).
+                    whereEqualTo(QUERY_VILLE_CONSTANT, ville);
+        } else if (!ville.equals(N_A) && commune.equals(N_A) && !quartier.equals(N_A)) {
+            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).
+                    whereEqualTo(QUERY_VILLE_CONSTANT, ville).whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
+        } else if (!ville.equals(N_A) && !commune.equals(N_A) && quartier.equals(N_A)) {
+            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).
+                    whereEqualTo(QUERY_VILLE_CONSTANT, ville).whereEqualTo(QUERY_COMMUNE_CONSTANT, commune);
+        } else if (!ville.equals(N_A) && !commune.equals(N_A) && !quartier.equals(N_A)) {
+            query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).
+                    whereEqualTo(QUERY_VILLE_CONSTANT, ville).whereEqualTo(QUERY_COMMUNE_CONSTANT, commune)
+                    .whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
         }
 
 
