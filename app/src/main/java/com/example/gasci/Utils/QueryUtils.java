@@ -21,44 +21,6 @@ public class QueryUtils {
     }
 
 
-    /**
-     * Helper method for making a query for a particular location
-     *
-     * @param commune est la commune du business
-     * @return a querry object and Task<QuerySnapshot>
-     */
-    public static Query makeQuery(String commune) {
-        Query query = FirebaseFirestore.getInstance().collection(BusinessDetails.INFO_BUSINESS).whereEqualTo(QUERY_COMMUNE_CONSTANT, commune);
-        Log.e(TAG, "makeQuery: beginning"
-                + "\ncommune: " + commune);
-
-
-        /**
-         if (!ville.equals(N_A)) {
-
-         Log.e(TAG, "makeQuery: " + ville);
-         query.whereEqualTo(QUERY_VILLE_CONSTANT, ville);
-         }
-         **/
-        if (!commune.equals(N_A)) {
-            query.whereEqualTo(QUERY_COMMUNE_CONSTANT, commune);
-            Log.e(TAG, "makeQuery: " + commune);
-
-
-        }
-        /**
-
-         if (!quartier.equals(N_A)) {
-         query.whereEqualTo(QUERY_QUARTIER_CONSTANT, quartier);
-         Log.e(TAG, "makeQuery: " + quartier);
-
-
-         }
-         **/
-
-
-        return query;
-    }
 
     /**
      * Helper method for making a query for a particular location
