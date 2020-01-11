@@ -1,123 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fillViewport="true"
     tools:context=".BusinessDetails">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/business_details_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:orientation="vertical">
 
-    <com.omarshehe.forminputkotlin.FormInputText
-        android:layout_marginTop="16dp"
-        android:id="@+id/nom_magazin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:form_height="40dp"
-        app:form_hint="nom de magazin"
-        app:form_inputType="text"
-        app:form_isMandatory="true"
-        app:form_label="Nom de magazin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.055" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <com.omarshehe.forminputkotlin.FormInputText
-        android:id="@+id/prenom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:form_height="40dp"
-        app:form_hint="ton prenon"
-        app:form_inputType="text"
-        app:form_isMandatory="true"
-        app:form_label="rentre ton prenom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nom_magazin"
-        app:layout_constraintVertical_bias="0.0" />
+            <com.omarshehe.forminputkotlin.FormInputText
+                android:id="@+id/nom_magazin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:form_height="40dp"
+                app:form_hint="nom de magazin"
+                app:form_inputType="text"
+                app:form_isMandatory="true"
+                app:form_label="Nom de magazin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.055" />
 
-    <TextView
-        android:id="@+id/ville"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:height="40dp"
-        android:background="#FFFAFA"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:text="Abidjan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prenom" />
+            <com.omarshehe.forminputkotlin.FormInputText
+                android:id="@+id/prenom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:form_height="40dp"
+                app:form_hint="ton prenon"
+                app:form_inputType="text"
+                app:form_isMandatory="true"
+                app:form_label="rentre ton prenom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nom_magazin"
+                app:layout_constraintVertical_bias="0.0" />
 
-    <com.omarshehe.forminputkotlin.FormInputAutoComplete
-        android:id="@+id/commune"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:form_array="@array/commune_array"
-        app:form_height="40dp"
-        app:form_hint="Entre ta commune de residence"
-        app:form_inputType="text"
-        app:form_isMandatory="true"
-        app:form_label="Commune"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ville" />
+            <TextView
+                android:id="@+id/ville"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:height="40dp"
+                android:background="#FFFAFA"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:text="Abidjan"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/prenom" />
+
+            <com.omarshehe.forminputkotlin.FormInputAutoComplete
+                android:id="@+id/commune"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:form_array="@array/commune_array"
+                app:form_height="40dp"
+                app:form_hint="Entre ta commune de residence"
+                app:form_inputType="text"
+                app:form_isMandatory="true"
+                app:form_label="Commune"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ville" />
 
 
-    <com.omarshehe.forminputkotlin.FormInputText
-        android:id="@+id/nomQuartier"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:form_height="40dp"
-        app:form_hint="Entre ton quartier de residence"
-        app:form_inputType="text"
-        app:form_isMandatory="true"
-        app:form_label="Ton quartier"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commune" />
+            <com.omarshehe.forminputkotlin.FormInputText
+                android:id="@+id/nomQuartier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:form_height="40dp"
+                app:form_hint="Entre ton quartier de residence"
+                app:form_inputType="text"
+                app:form_isMandatory="true"
+                app:form_label="Ton quartier"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/commune" />
 
-    <com.omarshehe.forminputkotlin.FormInputText
-        android:id="@+id/phoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:form_hint="55251771"
-        app:form_inputType="phoneNumber"
-        app:form_isMandatory="true"
-        app:form_label="Numero"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nomQuartier" />
+            <com.omarshehe.forminputkotlin.FormInputText
+                android:id="@+id/phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:form_hint="55251771"
+                app:form_inputType="phoneNumber"
+                app:form_isMandatory="true"
+                app:form_label="Numero"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nomQuartier" />
 
-    <com.omarshehe.forminputkotlin.FormInputButton
-        android:id="@+id/btnSubmit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:onClick="registerMagasin"
-        app:form_background="@color/colorPrimary"
-        app:form_cornerRadius="80"
-        app:form_height="55dp"
-        app:form_progressColor="@color/colorRed"
-        app:form_showProgress="true"
-        app:form_textColor="@color/white"
-        app:form_value="@string/Submit" />
+            <com.omarshehe.forminputkotlin.FormInputButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:onClick="registerMagasin"
+                app:form_background="@color/colorPrimary"
+                app:form_cornerRadius="80"
+                app:form_height="55dp"
+                app:form_progressColor="@color/colorRed"
+                app:form_showProgress="true"
+                app:form_textColor="@color/white"
+                app:form_value="@string/Submit">
 
-    </LinearLayout>
-</ScrollView>
+            </com.omarshehe.forminputkotlin.FormInputButton>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

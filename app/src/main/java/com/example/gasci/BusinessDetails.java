@@ -16,6 +16,8 @@ import android.text.TextWatcher;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,11 @@ public class BusinessDetails extends AppCompatActivity {
     FormInputText quartierView;
     @BindView(R.id.phoneNumber)
     FormInputText numeroView;
+
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.business_details_layout)
+    ScrollView businessDetailsLayout;
 
     @BindViews({R.id.nom_magazin, R.id.prenom, R.id.nomQuartier, R.id.phoneNumber})
     List<FormInputText> inputTexts;
@@ -171,6 +178,7 @@ public class BusinessDetails extends AppCompatActivity {
                 return;
             }
 
+
             CollectionReference collection = firestoredb.collection(INFO_BUSINESS);
 
             if (sharedPref.getString(INFO_USER_SHARED_PREF_KEY, "").isEmpty()) {
@@ -181,10 +189,16 @@ public class BusinessDetails extends AppCompatActivity {
             }
 
             Magasin magasin = getMagasinInPaper();
+
+            businessDetailsLayout.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
             document.set(magasin).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    Log.e(TAG, "onComplete:  task has begun");
                     if (task.isSuccessful()) {
+                        Log.e(TAG, "onComplete:  task is successful ");
 
                         if (sharedPref.getString(INFO_USER_SHARED_PREF_KEY, "").isEmpty()) {
                             SharedPreferences.Editor editor = sharedPref.edit();
