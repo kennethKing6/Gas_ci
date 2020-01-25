@@ -58,9 +58,7 @@
         android:id="@+id/numero_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:enabled="false"
         android:inputType="number"
-        android:text="Contact: "
         android:textColor="@color/black"
         android:textSize="18sp" />
 

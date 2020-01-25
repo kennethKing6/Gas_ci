@@ -118,7 +118,7 @@
                 android:layout_marginTop="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                app:form_hint="55251771"
+                app:form_hint="+225 55251771"
                 app:form_inputType="phoneNumber"
                 app:form_isMandatory="true"
                 app:form_label="Numero"

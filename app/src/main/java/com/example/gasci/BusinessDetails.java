@@ -9,16 +9,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.entire.sammalik.samlocationandgeocoding.SamLocationRequestService;
@@ -41,6 +38,8 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import io.paperdb.Paper;
 
+import static com.example.gasci.Dialogs.LocationDialog.BUSINESS_LOOK_UP;
+
 public class BusinessDetails extends AppCompatActivity {
 
     public static final String TAG = BusinessDetails.class.getSimpleName();
@@ -48,6 +47,9 @@ public class BusinessDetails extends AppCompatActivity {
     public static final String INFO_BUSINESS = "infoBusiness";
     public static final String INFO_USER_SHARED_PREF_KEY = "info_user";
     public static final String USER_BUSINESS_INFO = "userBusinessInfo";
+    //TODO: match +225 78011473 and +22578011473
+    public static final String PHONE_NUMBER_PATTERN = "(\\+[2][2][5])(\\s)?(\\d{8})";
+    public static final String NON_COMMUNE = "XXXXXX";
     SamLocationRequestService samLocationRequestService;
 
     FormInputText textView;
@@ -59,7 +61,7 @@ public class BusinessDetails extends AppCompatActivity {
     @BindView(R.id.prenom)
     FormInputText prenomView;
     @BindView(R.id.ville)
-    TextView villeTextView;
+    FormInputAutoComplete villeInputAutoComplete;
     @BindView(R.id.commune)
     FormInputAutoComplete communeView;
     @BindView(R.id.nomQuartier)
@@ -97,8 +99,8 @@ public class BusinessDetails extends AppCompatActivity {
         textView = findViewById(R.id.nom_magazin);
 
 
-        listenForEmptyField();
         initializeFields();
+        attachListeners();
 
 
         numeroView.getInputBox().addTextChangedListener(new TextWatcher() {
@@ -110,38 +112,21 @@ public class BusinessDetails extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (start < 7) {
+                if (numeroView.getValue().matches(PHONE_NUMBER_PATTERN)) {
+                    numeroView.getInputBox().setTextColor(Color.parseColor("green"));
+
+                } else {
                     numeroView.getInputBox().setTextColor(Color.parseColor("red"));
-
-                } else if (numeroView.getValue().matches("[+]225 (\\d{8})")) {
-                    Magasin magasin = Paper.book().read(USER_BUSINESS_INFO);
-                    String correctNumber = "";
-                    for (int i = 0; i < magasin.getNumero().length(); i++) {
-                        correctNumber += s.charAt(i);
-
-                    }
-                    numeroView.setValue(correctNumber);
-                    numeroView.getInputBox().setTextColor(Color.parseColor("green"));
-                    Toast.makeText(BusinessDetails.this, "knd", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "onTextChanged: matches ");
-
-                } else if (start > 7) {
-                    String correctNumber = "";
-                    for (int i = 0; i < 8; i++) {
-                        correctNumber += s.charAt(i);
-
-                    }
-                    numeroView.setValue(correctNumber);
-                    numeroView.getInputBox().setTextColor(Color.parseColor("green"));
-
-                } else if (start == 7) {
-                    numeroView.getInputBox().setTextColor(Color.parseColor("green"));
 
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (numeroView.getValue().matches(PHONE_NUMBER_PATTERN)) {
+
+                    numeroView.showValidIcon(true);
+                }
 
             }
         });
@@ -173,11 +158,22 @@ public class BusinessDetails extends AppCompatActivity {
 
         if (checkValidity()) {
 
-            if (!validerNumero()) {
+            if (!numeroView.getValue().matches(PHONE_NUMBER_PATTERN)) {
                 Toast.makeText(this, "Veuillez entrez un numero valid", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            if (!validerVille()) {
+                Toast.makeText(this, "Veuillez choisir une ville de la liste", Toast.LENGTH_SHORT).show();
+                villeInputAutoComplete.getInputBox().requestFocus();
+                return;
+            } else if (communeView.getVisibility() == View.VISIBLE) {
+                if (!validerCommune()) {
+                    Toast.makeText(this, "Veuillez choisir une commune de la liste", Toast.LENGTH_SHORT).show();
+                    communeView.getInputBox().requestFocus();
+                    return;
+                }
+            }
 
             CollectionReference collection = firestoredb.collection(INFO_BUSINESS);
 
@@ -236,12 +232,16 @@ public class BusinessDetails extends AppCompatActivity {
             if (magasin == null) {
                 magasin = new Magasin();
             }
-            magasin.setCommune(communeView.getValue());
+            magasin.setCommune(communeView.getVisibility() == View.VISIBLE ? communeView.getValue() : NON_COMMUNE);
             magasin.setNomDeMagazin(nomMagazinView.getValue());
             magasin.setPrenom(prenomView.getValue());
-            magasin.setVille(villeTextView.getText().toString());
+            magasin.setVille(villeInputAutoComplete.getValue());
             magasin.setQuartier(quartierView.getValue());
-            magasin.setNumero("+225 " + numeroView.getValue());
+
+            //Make sure the the number is always in the format +225 78011473 but not +22578011473
+            String numeroCorrectFormat = getCorrectNumberFomat(numeroView.getValue());
+
+            magasin.setNumero(numeroCorrectFormat);
             return magasin;
 
         } catch (NullPointerException e) {
@@ -249,6 +249,34 @@ public class BusinessDetails extends AppCompatActivity {
         }
 
         return null;
+    }
+
+    /**
+     * Helper method to help correctly format the owner's boutique phone number
+     *
+     * @param number to be correctly formatted. The phone number is supposed to have space
+     *               between the +225 and the 8 digits and that is the job of this method.
+     * @return the correctly formatted phone number
+     */
+    private String getCorrectNumberFomat(String number) {
+
+        if (number.matches("(\\+[2][2][5])(\\d{8})")) {
+
+            //Get the +225 section of the number i.e first section of the number
+            Pattern pattern1 = Pattern.compile("\\+[2][2][5]");
+            Matcher matcher1 = pattern1.matcher(number);
+            matcher1.find();
+
+
+            //Get the remaining 8 digits  section of the number i.e second section of the number
+            Pattern pattern2 = Pattern.compile("(\\+225)(\\d{8})");
+            Matcher matcher2 = pattern2.matcher(number);
+            matcher2.find();
+
+            number = matcher1.group() + " " + matcher2.group(2);
+
+        }
+        return number;
     }
 
     /**
@@ -265,7 +293,7 @@ public class BusinessDetails extends AppCompatActivity {
             }
 
         }
-        if (communeView.getValue().isEmpty()) {
+        if (communeView.getValue().isEmpty() && communeView.getVisibility() == View.VISIBLE) {
             communeView.getInputBox().setError("Veuillez choisir une commune");
             isValid = false;
 
@@ -273,7 +301,7 @@ public class BusinessDetails extends AppCompatActivity {
         return isValid;
     }
 
-    private void listenForEmptyField() {
+    private void attachListeners() {
         for (FormInputText inputText : inputTexts) {
 
             inputText.getInputBox().setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -295,15 +323,42 @@ public class BusinessDetails extends AppCompatActivity {
                 } else if (!hasFocus && !communeView.getValue().isEmpty()) {
 
 
-                    List<String> communeList = Arrays.asList(getResources().getStringArray(R.array.commune_array));
+                    List<String> communeList = Arrays.asList(getResources().getStringArray(R.array.abidjan_commune_array));
                     if (!communeList.contains(communeView.getValue())) {
                         communeView.getInputBox().setError("Veuillez choisir une commune de la liste");
                     }
                 }
             }
         });
+
+
+        SharedPreferences businessLookupSharedPref = getSharedPreferences(BUSINESS_LOOK_UP, Context.MODE_PRIVATE);
+
+        if (villeInputAutoComplete.getValue().equalsIgnoreCase("Abidjan")) {
+            communeView.setVisibility(View.VISIBLE);
+        }
+
+
+        villeInputAutoComplete.getInputBox().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus) {
+                    if (villeInputAutoComplete.getValue().equalsIgnoreCase("Abidjan"))
+                        communeView.setVisibility(View.VISIBLE);
+                    else {
+                        communeView.setVisibility(View.GONE);
+                    }
+
+                }
+            }
+        });
     }
 
+    /**
+     * Initialize all the Inputbox when this activity begins with this method.
+     * Get the values from the persisted data and display it if there are any
+     */
     private void initializeFields() {
         Magasin magasin = Paper.book().read(USER_BUSINESS_INFO);
 
@@ -311,7 +366,7 @@ public class BusinessDetails extends AppCompatActivity {
             communeView.setValue(magasin.getCommune());
             nomMagazinView.setValue(magasin.getNomDeMagazin());
             prenomView.setValue(magasin.getPrenom());
-            villeTextView.setText(magasin.getVille());
+            villeInputAutoComplete.setValue(magasin.getVille());
             quartierView.setValue(magasin.getQuartier());
             numeroView.setValue(magasin.getNumero());
         } catch (NullPointerException e) {
@@ -325,17 +380,23 @@ public class BusinessDetails extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (validerNumero() || numeroView.getValue().matches("[+]225 (\\d{8})")) {
+        if (numeroView.getValue().matches(PHONE_NUMBER_PATTERN)) {
 
             numeroView.getInputBox().setTextColor(Color.parseColor("green"));
-            numeroView.showValidIcon(false);
 
 
         }
 
     }
 
-    private boolean validerNumero() {
-        return numeroView.getValue().length() == 8;
+    private boolean validerVille() {
+        List<String> ville = Arrays.asList(getResources().getStringArray(R.array.ville_de_cote_ivoire_array));
+        return ville.contains(villeInputAutoComplete.getValue());
     }
+
+    private boolean validerCommune() {
+        List<String> commune = Arrays.asList(getResources().getStringArray(R.array.abidjan_commune_array));
+        return commune.contains(communeView.getValue());
+    }
+
 }

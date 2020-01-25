@@ -6,10 +6,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.util.Linkify;
@@ -19,8 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gasci.Dialogs.LocationDialog;
+import com.example.gasci.Exceptions.NoNumberException;
 import com.example.gasci.Utils.QueryUtils;
 import com.example.gasci.models.Magasin;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,12 +39,15 @@ import com.treebo.internetavailabilitychecker.InternetConnectivityListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.gasci.BusinessDetails.NON_COMMUNE;
+import static com.example.gasci.BusinessDetails.PHONE_NUMBER_PATTERN;
 import static com.example.gasci.Dialogs.LocationDialog.BUSINESS_LOOK_UP;
 import static com.example.gasci.Dialogs.LocationDialog.COMMUNE_SHARED_KEY;
 import static com.example.gasci.Dialogs.LocationDialog.QUARTIER_SHARED_KEY;
@@ -78,14 +86,24 @@ public class LesMagazinActivity extends AppCompatActivity {
             prenomTxtView.setText(magasin.getPrenom());
             nomMagazinTxtView.setText(magasin.getNomDeMagazin());
             villeTxtView.setText("Ville: " + magasin.getVille());
-            communeTxtView.setText("Commune: " + magasin.getCommune());
-            quartierTxtView.setText("Quartier: " + magasin.getQuartier());
-            numeroTextView.setText("Numero: " + magasin.getNumero());
 
-            Pattern numeroMatcher = Pattern.compile("[+]225 (\\d{8})");
+            if (!magasin.getCommune().equals(NON_COMMUNE)) {
+                communeTxtView.setText("Commune: " + magasin.getCommune());
+            } else {
+                communeTxtView.setVisibility(View.GONE);
+            }
+
+
+            quartierTxtView.setText("Quartier: " + magasin.getQuartier());
+            numeroTextView.setText("Contact: " + magasin.getNumero());
+
+            Pattern numeroMatcher = Pattern.compile(PHONE_NUMBER_PATTERN);
 
 
             Linkify.addLinks(numeroTextView, numeroMatcher, "");
+
+            //attach the listener on the number to be able to make a call
+            callNumber(numeroTextView);
 
 
         }
@@ -112,6 +130,42 @@ public class LesMagazinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_les_magazin);
 
         ButterKnife.bind(this);
+
+
+    }
+
+    /**
+     * @param numeroTextView that contains the gaz owner's number
+     */
+    public void callNumber(TextView numeroTextView) {
+
+
+        numeroTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Get the number to be matched
+                Pattern numeroMatcher = Pattern.compile(PHONE_NUMBER_PATTERN);
+                Matcher matcher = numeroMatcher.matcher(numeroTextView.getText().toString());
+
+                try {
+                    if (matcher.find()) {
+                        //Get the number
+                        String number = matcher.group();
+
+                        // Start the calling and pass it the number
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:" + number));
+                        startActivity(callIntent);
+                    } else {
+                        throw new NoNumberException("NoNumberException: The owner of the gaz failed to enter their phone number");
+                    }
+                } catch (NoNumberException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
 
     }
