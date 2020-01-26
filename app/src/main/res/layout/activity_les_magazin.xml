@@ -45,7 +45,7 @@
             app:srcCompat="@drawable/ic_empty_drawer" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/empty_message_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

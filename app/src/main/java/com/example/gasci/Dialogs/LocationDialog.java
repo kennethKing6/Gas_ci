@@ -95,7 +95,7 @@ public class LocationDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-
+                        
                         SharedPreferences.Editor businesspref = businessLookupSharedPref.edit();
                         if (!villeAutoComplete.getValue().isEmpty()) {
                             businesspref.putString(VILLE_SHARED_KEY, villeAutoComplete.getValue());
