@@ -7,13 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +17,10 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.gasci.LesMagazinActivity;
 import com.example.gasci.R;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.omarshehe.forminputkotlin.FormInputAutoComplete;
-import com.poliveira.parallaxrecyclerview.ParallaxRecyclerAdapter;
 
-import static com.example.gasci.LesMagazinActivity.RESTARTED_ACTIVITY;
+import butterknife.OnTextChanged;
+
 import static com.example.gasci.Utils.QueryUtils.N_A;
 
 public class LocationDialog extends DialogFragment {
@@ -40,9 +35,12 @@ public class LocationDialog extends DialogFragment {
     public static final String TAG = LocationDialog.class.getSimpleName();
 
 
-    private SharedPreferences businessLookupSharedPref;
 
+    private SharedPreferences businessLookupSharedPref;
     private Context context;
+
+    //Dialog main layout
+    View mainDialogLayout;
 
 
     public LocationDialog(Context context) {
@@ -59,34 +57,39 @@ public class LocationDialog extends DialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.location_layout, null);
+         mainDialogLayout = inflater.inflate(R.layout.location_layout, null);
 
         // sign in the user ...
-        FormInputAutoComplete villeAutoComplete = view.findViewById(R.id.ville);
-        FormInputAutoComplete communeAutoComplete = view.findViewById(R.id.commune);
-        FormInputAutoComplete quartierAutoComplete = view.findViewById(R.id.quartier);
+        FormInputAutoComplete villeAutoComplete = mainDialogLayout.findViewById(R.id.ville);
+        FormInputAutoComplete communeAutoComplete = mainDialogLayout.findViewById(R.id.commune);
+        FormInputAutoComplete quartierAutoComplete = mainDialogLayout.findViewById(R.id.quartier);
+        villeAutoComplete.requestFocus();
+
+
+
 
         prepareViews(villeAutoComplete, communeAutoComplete, quartierAutoComplete);
 
+        //Set the fields with the previously registered data
         if (!businessLookupSharedPref.getString(VILLE_SHARED_KEY,
                 "").isEmpty()) {
-            villeAutoComplete.setValue(businessLookupSharedPref.getString(VILLE_SHARED_KEY,
+            villeAutoComplete.setHint(businessLookupSharedPref.getString(VILLE_SHARED_KEY,
                     ""));
         }
         if (!businessLookupSharedPref.getString(COMMUNE_SHARED_KEY,
                 "").isEmpty()) {
-            communeAutoComplete.setValue(businessLookupSharedPref.getString(COMMUNE_SHARED_KEY,
+            communeAutoComplete.setHint(businessLookupSharedPref.getString(COMMUNE_SHARED_KEY,
                     ""));
         }
         if (!businessLookupSharedPref.getString(QUARTIER_SHARED_KEY,
                 "").isEmpty()) {
-            quartierAutoComplete.setValue(businessLookupSharedPref.getString(QUARTIER_SHARED_KEY,
+            quartierAutoComplete.setHint(businessLookupSharedPref.getString(QUARTIER_SHARED_KEY,
                     ""));
         }
 
         // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
-        builder.setView(view)
+        // Pass null as the parent mainDialogLayout because its going in the dialog layout
+        builder.setView(mainDialogLayout)
                 // Add action buttons
                 .setPositiveButton("Rechercher", new DialogInterface.OnClickListener() {
                     @Override
@@ -117,7 +120,7 @@ public class LocationDialog extends DialogFragment {
 
 
                         Intent intent = new Intent(context, LesMagazinActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                         startActivity(intent);
 
 
@@ -146,15 +149,18 @@ public class LocationDialog extends DialogFragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if (!hasFocus) {
                     if (villeAutoComplete.getValue().equalsIgnoreCase("Abidjan"))
                         communeAutoComplete.setVisibility(View.VISIBLE);
+                    else
+                        communeAutoComplete.setVisibility(View.GONE);
 
 
-                }
+
             }
         });
     }
+
+
 
 
 }

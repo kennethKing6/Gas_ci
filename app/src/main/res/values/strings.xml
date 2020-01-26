@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Gaz CI</string>
-    <string name="ville_default_value">N/A</string>
-    <string name="commune_default_value">N/A</string>
-    <string name="quartier_default_value">N/A</string>
 
 
     <!--Location querry dialog hint text-->

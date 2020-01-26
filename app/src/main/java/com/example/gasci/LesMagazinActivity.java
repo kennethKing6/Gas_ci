@@ -6,11 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gasci.Dialogs.LocationDialog;
 import com.example.gasci.Exceptions.NoNumberException;
@@ -34,8 +31,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.poliveira.parallaxrecyclerview.ParallaxRecyclerAdapter;
-import com.treebo.internetavailabilitychecker.InternetAvailabilityChecker;
-import com.treebo.internetavailabilitychecker.InternetConnectivityListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +47,7 @@ import static com.example.gasci.Dialogs.LocationDialog.BUSINESS_LOOK_UP;
 import static com.example.gasci.Dialogs.LocationDialog.COMMUNE_SHARED_KEY;
 import static com.example.gasci.Dialogs.LocationDialog.QUARTIER_SHARED_KEY;
 import static com.example.gasci.Dialogs.LocationDialog.VILLE_SHARED_KEY;
+import static com.example.gasci.Utils.QueryUtils.N_A;
 
 public class LesMagazinActivity extends AppCompatActivity {
 
@@ -132,6 +128,9 @@ public class LesMagazinActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
+        setupLesMagazinActivity();
+
+
     }
 
     /**
@@ -198,14 +197,27 @@ public class LesMagazinActivity extends AppCompatActivity {
     }
 
     /**
+     * This method fetches the appropriate data to start this activity by starting with the persisted locattion data
+     * and if no data has yet been existed uses the default value N/A. This is done to finally initialized the adapter
+     * to show Gaz boutique
+     */
+    private void setupLesMagazinActivity() {
+        SharedPreferences sharedPreferences = getSharedPreferences(BUSINESS_LOOK_UP, Context.MODE_PRIVATE);
+
+        initializeAdapter(sharedPreferences.getString(VILLE_SHARED_KEY, N_A),
+                sharedPreferences.getString(COMMUNE_SHARED_KEY, N_A),
+                sharedPreferences.getString(QUARTIER_SHARED_KEY, N_A));
+
+    }
+
+    /**
      * This method is used to make queries in the app for different business location
      *
      * @param ville
      * @param commune
      * @param quartier
      */
-
-    public void initializeAdapter(String ville, String commune, String quartier) {
+    private void initializeAdapter(String ville, String commune, String quartier) {
         Query query = QueryUtils.makeQuery(ville, commune, quartier);
 
 
@@ -222,7 +234,6 @@ public class LesMagazinActivity extends AppCompatActivity {
                             R.layout.myparallaxview, null, false), recyclerView);
                     recyclerView.setLayoutManager(new LinearLayoutManager(LesMagazinActivity.this));
                     recyclerView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
 
                 } else {
                     if (!task.isSuccessful() || !isConnected()) {
@@ -232,7 +243,6 @@ public class LesMagazinActivity extends AppCompatActivity {
                         recyclerView.setVisibility(View.GONE);
                         noInternetLayout.setVisibility(View.VISIBLE);
                     } else if (myContent.size() == 0) {
-                        //TODO: Show empty list layout
                         new CountDownTimer(3000, 1000) {
                             public void onTick(long millisUntilFinished) {
                             }
@@ -256,13 +266,6 @@ public class LesMagazinActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
-        SharedPreferences sharedPreferences = getSharedPreferences(BUSINESS_LOOK_UP, Context.MODE_PRIVATE);
-
-        initializeAdapter(sharedPreferences.getString(VILLE_SHARED_KEY, getString(R.string.ville_default_value)),
-                sharedPreferences.getString(COMMUNE_SHARED_KEY, getString(R.string.commune_default_value)),
-                sharedPreferences.getString(QUARTIER_SHARED_KEY, getString(R.string.quartier_default_value)));
 
 
     }

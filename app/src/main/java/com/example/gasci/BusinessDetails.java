@@ -47,7 +47,6 @@ public class BusinessDetails extends AppCompatActivity {
     public static final String INFO_BUSINESS = "infoBusiness";
     public static final String INFO_USER_SHARED_PREF_KEY = "info_user";
     public static final String USER_BUSINESS_INFO = "userBusinessInfo";
-    //TODO: match +225 78011473 and +22578011473
     public static final String PHONE_NUMBER_PATTERN = "(\\+[2][2][5])(\\s)?(\\d{8})";
     public static final String NON_COMMUNE = "XXXXXX";
     SamLocationRequestService samLocationRequestService;
