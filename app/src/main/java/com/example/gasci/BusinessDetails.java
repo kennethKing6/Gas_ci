@@ -317,6 +317,13 @@ public class BusinessDetails extends AppCompatActivity {
         communeView.getInputBox().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+
+                //Make the communeView visible if Abidjan is the chosen city
+                if (villeInputAutoComplete.getValue().equalsIgnoreCase("Abidjan"))
+                    communeView.setVisibility(View.VISIBLE);
+                else
+                    communeView.setVisibility(View.GONE);
+
                 if (!hasFocus && communeView.getValue().isEmpty()) {
                     communeView.getInputBox().setError("Veuillez remplir cette case");
                 } else if (!hasFocus && !communeView.getValue().isEmpty()) {
