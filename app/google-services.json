@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1007571013120",
+    "firebase_url": "https://gas-ci.firebaseio.com",
+    "project_id": "gas-ci",
+    "storage_bucket": "gas-ci.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007571013120:android:384fe329e014639f6752e5",
+        "android_client_info": {
+          "package_name": "com.example.gasci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007571013120-ritqiflb3psead26d879llq4qjeujtql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gasci",
+            "certificate_hash": "2cdee2dbc7640899b820c26fbc2d7a67fdeb44b1"
+          }
+        },
+        {
+          "client_id": "1007571013120-9us23i932fub91f6ipekthmr928jp2pi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbTUvKpXtY56frYo81VHh_5M90dn4R6CA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007571013120-9us23i932fub91f6ipekthmr928jp2pi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
